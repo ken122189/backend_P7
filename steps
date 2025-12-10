@@ -1,0 +1,6 @@
+npm init -y
+npm install @nestjs/common @nestjs/core @nestjs/platform-express reflect-metadata rxjs
+npm install express
+npm install mysql2 dotenv bcryptjs passport passport-jwt @nestjs/jwt @nestjs/passport
+npm install ts-node-dev typescript @types/node --save-dev
+npm install --save-dev @types/passport-jwt
