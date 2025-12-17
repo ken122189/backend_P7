@@ -1,30 +1,26 @@
-// src/main.ts (CORRECTED CORS LIST)
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule);
 
-  app.setGlobalPrefix('api'); 
+  app.setGlobalPrefix('api'); 
 
-  // --- CORS FIX: Allowing the correct IP from the browser screenshot ---
-  const allowedOrigins = [
-    // NEW: The IP the browser is actually using, based on the screenshot
-    'http://192.168.1.35:3000', 
-    
-    // OLD: You can keep these as backups
-    'http://10.18.95.24:3000', 
-    'http://localhost:3000',
-    'http://127.0.0.1:3000',
-  ];
+  // --- CORS SETTINGS ---
+  // In production, 'origin: true' reflects the request origin, which is 
+  // safer for testing multiple frontend sources.
+  app.enableCors({
+    origin: true, 
+    credentials: true,
+  });
 
-  app.enableCors({
-    origin: allowedOrigins,
-    credentials: true,
-  });
-  // --------------------------------------------------------
+  // --- RENDER FIX: DYNAMIC PORT & HOST BINDING ---
+  // 1. Render assigns a port dynamically (usually 10000). 
+  // 2. We must bind to '0.0.0.0' so the external world can reach the app.
+  const port = process.env.PORT || 8000; 
 
-  await app.listen(8000); 
-  console.log(`Application is running on: http://localhost:8000`);
+  await app.listen(port, '0.0.0.0'); 
+  
+  console.log(`Application is running on port: ${port}`);
 }
 bootstrap();
